@@ -4,6 +4,7 @@ import { clips, labels, pipelineSteps, queries, quizQuestions, sentences, type C
 import { rankedClips } from './math';
 
 const chapters = [
+  { short: 'What is it?', title: 'Watch an embedding happen', prompt: 'One piece of text in, number card out' },
   { short: 'The problem', title: 'Find the right clip', prompt: 'Why search by meaning?' },
   { short: 'The numbers', title: 'Give words a number card', prompt: 'What is an embedding?' },
   { short: 'The steps', title: 'Watch the work happen', prompt: 'Where do the numbers come from?' },
@@ -48,6 +49,116 @@ function DemoNote({ children, warning = false }: { children: ReactNode; warning?
 
 function StepTitle({ eyebrow, title, children }: { eyebrow: string; title: string; children: ReactNode }) {
   return <div className="chapter-intro"><p className="section-eyebrow">{eyebrow}</p><h2>{title}</h2><p>{children}</p></div>;
+}
+
+
+/**
+ * First lesson. All four-number cards are hand-written teaching props, NOT
+ * embeddings returned by an AI model. Similarity ranking uses real cosine math.
+ */
+const labExamples = [
+  {label:'Get time back',icon:'⏰',
+   question:'How can John help an owner get weekends back?',q:[.97,.12,.07,.04],
+   clips:[
+    {id:'A',name:'Less work',text:'I stopped sitting in every meeting, so Friday was mine again.',v:[.95,.09,.07,.04],time:'08:20'},
+    {id:'B',name:'Better sales',text:'I made a clear offer so the right clients could say yes.',v:[.09,.95,.10,.08],time:'18:12'},
+    {id:'C',name:'Client care',text:'I sent a personal welcome note before our first call.',v:[.08,.14,.05,.97],time:'25:05'}]},
+  {label:'Find better clients',icon:'🎯',
+   question:'How can John help me find the right paying clients?',q:[.11,.97,.10,.05],
+   clips:[
+    {id:'A',name:'Less work',text:'I stopped sitting in every meeting, so Friday was mine again.',v:[.95,.09,.07,.04],time:'08:20'},
+    {id:'B',name:'Better sales',text:'I made a clear offer so the right clients could say yes.',v:[.09,.95,.10,.08],time:'18:12'},
+    {id:'C',name:'Client care',text:'I sent a personal welcome note before our first call.',v:[.08,.14,.05,.97],time:'25:05'}]},
+  {label:'Care for clients',icon:'🤝',
+   question:'How does John make a new client feel welcome?',q:[.06,.12,.05,.99],
+   clips:[
+    {id:'A',name:'Less work',text:'I stopped sitting in every meeting, so Friday was mine again.',v:[.95,.09,.07,.04],time:'08:20'},
+    {id:'B',name:'Better sales',text:'I made a clear offer so the right clients could say yes.',v:[.09,.95,.10,.08],time:'18:12'},
+    {id:'C',name:'Client care',text:'I sent a personal welcome note before our first call.',v:[.08,.14,.05,.97],time:'25:05'}]},
+] as const;
+
+type DemoNumbers = readonly [number,number,number,number];
+function demoSimilarity(a:DemoNumbers,b:DemoNumbers):number {
+  const dot=a.reduce((sum,value,i)=>sum+value*b[i],0);
+  const lenA=Math.sqrt(a.reduce((sum,v)=>sum+v*v,0));
+  const lenB=Math.sqrt(b.reduce((sum,v)=>sum+v*v,0));
+  return dot/(lenA*lenB);
+}
+function TinyCard({nums,plain=false}:{nums:DemoNumbers;plain?:boolean}) {
+  return <div className={'tiny-number-card'+(plain?' is-plain':'')} aria-label={'Four practice numbers: '+nums.map(x=>x.toFixed(2)).join(', ')}>
+    {nums.map((value,i)=><span className="tiny-num" key={i}><strong>{value.toFixed(2)}</strong><i style={{height:String(Math.round(value*100))+'%'}}/></span>)}
+  </div>;
+}
+function FirstEmbedding() {
+  const [example,setExample]=useState(0);
+  const [step,setStep]=useState(0);
+  const [picked,setPicked]=useState<string|null>(null);
+  const [expand,setExpand]=useState(false);
+  const item=labExamples[example];
+  const results=[...item.clips].map(c=>({...c,similarity:demoSimilarity(item.q,c.v)})).sort((a,b)=>b.similarity-a.similarity);
+  function chooseExample(i:number){setExample(i);setStep(0);setPicked(null);}
+  const stepDescriptions=[
+    <>The words are the <b>input</b>. Rose has three short pieces of a video transcript. Her question uses different words.</>,
+    <>An <b>embedding model</b> reads each piece of text and returns a list of numbers. It does not write a post or pick a clip. The app saves the numbers <b>next to the text and video time</b>.</>,
+    <>Rose's question goes through <b>the same embedding model</b>. Now her question has a number card too. A fair comparison needs the same model for both sides.</>,
+    <>The computer compares Rose's number card with <b>every saved card</b>, puts the closest first, and shows Rose the real words and video time. <b>Rose checks the video.</b></>,
+  ];
+  return <>
+    <StepTitle eyebrow="START HERE · THE PLAIN ANSWER" title="An embedding is a number list made from words">
+      You give a trained computer program some text. It gives you a fixed-size list of numbers. An app compares those lists to find text that talks about similar things.
+    </StepTitle>
+    <div className="definition-banner">
+      <div className="definition-mark">Aa <span>→</span> 123</div>
+      <div><span className="small-title">IF YOU REMEMBER ONE THING</span><p><strong>Text goes in. Numbers come out.</strong> Those numbers help a computer find similar ideas, even when the words are different.</p></div>
+    </div>
+    <div className="lesson-grid two lab-analogy">
+      <article className="lab-story"><span className="lab-story-icon" aria-hidden="true">📚</span><div><h3>Picture a shelf of notebooks</h3><p>John has hundreds of pages of notes. Rose wants a page about having more free time. She can't remember its exact words. Embeddings help put <strong>similar ideas near each other</strong>, so she knows where to look first.</p></div></article>
+      <article className="lab-story"><span className="lab-story-icon" aria-hidden="true">🔎</span><div><h3>Now watch the real job</h3><p>Instead of opening every video, Rose types what she's looking for. The app ranks likely transcript moments. She still checks John's actual recording before posting.</p></div></article>
+    </div>
+    <div className="lab-workbench">
+      <div className="lab-workbench-head">
+        <div><span className="small-title">THE CLICK-THROUGH WORKSHOP</span><h3>Make a pretend embedding, then use it.</h3><p>Choose the topic Rose wants. Press the steps in order and watch what changes.</p></div>
+        <span className="lab-offline">● Works offline</span>
+      </div>
+      <div className="lab-topic" role="group" aria-label="Choose one of three practice searches">{labExamples.map((c,i)=><button type="button" key={c.label} className={'lab-topic-button'+(example===i?' current':'')} aria-pressed={example===i} onClick={()=>chooseExample(i)}><span>{c.icon}</span>{c.label}</button>)}</div>
+      <div className="lab-stage-nav" aria-label="Steps of making and using an embedding">
+        {['1. Read words','2. Make numbers','3. Number the question','4. Find a match'].map((t,i)=><button className={'lab-stage-tab'+(step===i?' current':'')} type="button" key={t} aria-current={step===i?'step':undefined} onClick={()=>{setStep(i);setPicked(null)}}><span className="lab-stage-number">{i+1}</span><span>{t.substring(3)}</span></button>)}
+      </div>
+      <div className="lab-board" aria-live="polite">
+        <div className="lab-narration"><strong>WHAT JUST HAPPENED?</strong><p>{stepDescriptions[step]}</p></div>
+        <div className="lab-board-grid">
+          <div className="lab-slip-stack">
+            <span className="lab-label">JOHN'S VIDEO · PRACTICE TRANSCRIPT</span>
+            {item.clips.map(c=><div key={c.id} className={'lab-slip'+(picked===c.id?' lab-picked':'')}><span className="lab-slip-letter">{c.id}</span><div className="lab-slip-content"><strong>“{c.text}”</strong><small>Made-up recording · {c.time}</small></div>{step>=1&&<TinyCard nums={c.v} plain/>}</div>)}
+          </div>
+          <div className="lab-right-stack">
+            <div className="lab-input-box">
+              <span className="lab-label">WHAT ROSE ASKS</span>
+              <div className="lab-question"><span>⌕</span><strong>“{item.question}”</strong></div>
+              {step>=2?<div className="lab-query-card"><span className="lab-label">THE SAME MODEL MAKES 4 DEMO NUMBERS</span><TinyCard nums={item.q}/></div>:<div className="lab-no-card">No number card for this question yet.</div>}
+            </div>
+            {step===0&&<div className="lab-computer"><span className="lab-computer-icon">🧠</span><div><strong>The model has not run yet.</strong><p>So far, we only have words.</p></div></div>}
+            {step===1&&<div className="lab-computer"><span className="lab-computer-icon">🔢</span><div><strong>Three clip cards are made.</strong><p>Same size. Different numbers. Each card stays attached to its own text.</p></div></div>}
+            {step===2&&<div className="lab-computer"><span className="lab-computer-icon">🧩</span><div><strong>Now both sides have numbers.</strong><p>We can compare the question with the three clips.</p></div></div>}
+            {step===3&&<div className="lab-results"><span className="lab-label">CLOSEST IDEAS FIRST · CLICK A RESULT</span>{results.map((c,i)=><button type="button" key={c.id} className={'lab-hit'+(picked===c.id?' chosen':'')} onClick={()=>setPicked(c.id)}><span className="lab-hit-index">{i+1}</span><span className="lab-hit-body"><strong>Clip {c.id} · {c.name}</strong><span className="lab-meter"><i style={{width:String(Math.round(c.similarity*100))+'%'}}/></span></span><span className="lab-hit-score">{c.similarity.toFixed(2)}<small>match</small></span></button>)}
+              <div className="lab-human-check">{picked?<><strong>Rose opens clip {picked} and checks the original.</strong><span>A close score is only a clue. It is not proof that John said something.</span></>:<><strong>Closest is not always correct.</strong><span>Tap a clip to see the final human check.</span></>}</div>
+            </div>}
+          </div>
+        </div>
+        <div className="lab-step-controls"><button type="button" className="btn-secondary" disabled={step===0} onClick={()=>{setStep(step-1);setPicked(null)}}>← Back one step</button><span>Step {step+1} of 4</span><button type="button" className="btn-primary" onClick={()=>{setStep((step+1)%4);setPicked(null)}}>{step===3?'Try again':'Next: '+['Make numbers','Number the question','Compare the cards'][step]} <Icon name="arrow" size={16}/></button></div>
+      </div>
+      <div className="lab-zoom">
+        <div className="lab-zoom-top"><div><span className="small-title">LOOK INSIDE THE NUMBER CARD</span><p>We only draw 4 big numbers above, so you can follow along. A real model can make <b>hundreds</b>. The workshop model used 512.</p></div><button type="button" className="lab-zoom-toggle" aria-expanded={expand} onClick={()=>setExpand(!expand)}>{expand?'Hide the 512 boxes':'Show me 512 boxes'} <span>{expand?'−':'+'}</span></button></div>
+        {expand&&<><div className="lab-512" aria-label="Illustration of 512 number slots">{Array.from({length:512},(_,i)=><span key={i} style={{opacity:String(.33+(i%13)/21)}}/>)}</div><p className="card-caption">512 slots = 512 separate numbers for one piece of text. The colored squares are just a picture of the size, not real values. These numbers aren't neat labels like “time” or “sales.”</p></>}
+      </div>
+    </div>
+    <div className="lab-remember-grid">
+      <div><span>✅</span><h3>What the embedding IS</h3><p>A fixed-size list of numbers made by a trained model from text. The list is used to compare pieces of text.</p></div>
+      <div><span>❌</span><h3>What it IS NOT</h3><p>Not John's voice, not a transcript, not a summary, not a finished post, and not a promise that a search result is right.</p></div>
+      <div><span>🎬</span><h3>What Rose can actually DO</h3><p>Search John's words by idea, open likely moments faster, check the original, then choose a clip.</p></div>
+    </div>
+    <DemoNote warning><strong>Accuracy check:</strong> The four numbers and all “John clips” on this screen are hand-made examples. The comparison score uses real math, but <strong>there is no live embedding model and no real John recording in this demo.</strong></DemoNote>
+  </>;
 }
 
 function Problem() {
@@ -225,7 +336,7 @@ function Quiz() {
   </>;
 }
 
-const views=[<Problem/>,<NumberCards/>,<Pipeline/>,<Search/>,<Check/>,<YourWork/>,<Quiz/>];
+const views=[<FirstEmbedding/>,<Problem/>,<NumberCards/>,<Pipeline/>,<Search/>,<Check/>,<YourWork/>,<Quiz/>];
 
 export function App() {
   const [chapter,setChapter]=useState(0);const [visited,setVisited]=useState<ReadonlySet<number>>(new Set([0]));
@@ -235,13 +346,13 @@ export function App() {
     <a className="skip-link" href="#lesson-content">Skip to lesson</a>
     <header className="topbar"><div className="site-container topbar-inner"><div className="brandmark"><span className="brand-orbit">✳</span><div><strong>HAPPIER WORK <span className="brand-slash">/</span> LEARNING LAB</strong><small>A Rose + Tim practice tool</small></div></div><span className="topbar-right"><span className="status-dot"/>Works without the workshop API</span></div></header>
     <div className="site-container main-layout">
-      <aside className="sidebar" aria-label="Lesson outline"><div className="sidebar-sticky"><div className="course-card"><span className="course-kicker">GUIDED LESSON</span><h1>Meet the<br/><em>embedding.</em></h1><p>Learn the idea. See the numbers. Find a clip.</p><div className="course-line"><Icon name="play" size={16}/> About 10 minutes</div></div>
-        <div className="course-nav-title">YOUR PATH <span>{chapter+1} / 7</span></div>
+      <aside className="sidebar" aria-label="Lesson outline"><div className="sidebar-sticky"><div className="course-card"><span className="course-kicker">GUIDED LESSON</span><h1>Make an<br/><em>embedding.</em></h1><p>Text in. Numbers out. Similar ideas found.</p><div className="course-line"><Icon name="play" size={16}/> About 12 minutes</div></div>
+        <div className="course-nav-title">YOUR PATH <span>{chapter+1} / {chapters.length}</span></div>
         <nav className="chapter-nav">{chapters.map((c,i)=><button type="button" key={c.short} onClick={()=>change(i)} aria-current={chapter===i?'step':undefined} className={`chapter-link ${chapter===i?'active':''}`}><span className="chapter-index">{visited.has(i)&&i<chapter?<Icon name="check" size={15}/>:String(i+1).padStart(2,'0')}</span><span><strong>{c.short}</strong><small>{c.prompt}</small></span>{chapter===i&&<Icon name="chevron" size={18}/>}</button>)}</nav>
         <p className="sidebar-footnote">Inspired by the calm, useful business systems John teaches. Not an official John brand product.</p>
       </div></aside>
       <main className="content" id="lesson-content">
-        <section className="hero-banner" aria-label="Lesson introduction"><div><span className="hero-kicker">THE FIVE-MINUTE IDEA, BUILT TO PRACTICE</span><h2>Find the <em>meaning.</em><br/>Keep the <em>proof.</em></h2><p>Using the kind of clips Rose searches for in John's recordings.</p><div className="hero-pills"><span>✳ No tech skills needed</span><span>✳ Try every step</span></div></div><div className="hero-art" aria-hidden="true"><span className="art-word word-a">“Less busy”</span><span className="art-word word-b">“More free time”</span><span className="art-vector">[ 0.96 · 0.11 · … ]</span><span className="art-dot dot-a"/><span className="art-dot dot-b"/><span className="art-dot dot-c"/><svg viewBox="0 0 300 260" preserveAspectRatio="none"><path d="M62 93 Q152 36 233 138" stroke="#007EA8" strokeDasharray="5 9" strokeWidth="2" fill="none"/><path d="M55 173 Q145 230 233 138" stroke="#9AA6BE" strokeDasharray="4 10" strokeWidth="2" fill="none"/></svg></div></section>
+        <section className="hero-banner" aria-label="Lesson introduction"><div><span className="hero-kicker">THE PLAIN ANSWER, BUILT TO PRACTICE</span><h2>Find the <em>meaning.</em><br/>Keep the <em>proof.</em></h2><p>Using the kind of clips Rose searches for in John's recordings.</p><div className="hero-pills"><span>✳ No tech skills needed</span><span>✳ Try every step</span></div></div><div className="hero-art" aria-hidden="true"><span className="art-word word-a">“Less busy”</span><span className="art-word word-b">“More free time”</span><span className="art-vector">[ 0.96 · 0.11 · … ]</span><span className="art-dot dot-a"/><span className="art-dot dot-b"/><span className="art-dot dot-c"/><svg viewBox="0 0 300 260" preserveAspectRatio="none"><path d="M62 93 Q152 36 233 138" stroke="#007EA8" strokeDasharray="5 9" strokeWidth="2" fill="none"/><path d="M55 173 Q145 230 233 138" stroke="#9AA6BE" strokeDasharray="4 10" strokeWidth="2" fill="none"/></svg></div></section>
         <div className="chapter-topline"><span className="chapter-name">LESSON {String(chapter+1).padStart(2,'0')} <span> / {active.short.toUpperCase()}</span></span><span className="demo-label"><Icon name="shield" size={15}/> Safe practice data</span></div>
         <div key={chapter} className="lesson-view">{views[chapter]}</div>
         <div className="lesson-actions"><button type="button" onClick={()=>change(chapter-1)} disabled={chapter===0} className="btn-secondary">← Previous</button><div className="action-progress">{chapters.map((_,i)=><span className={i===chapter?'active':visited.has(i)?'seen':''} key={i}/>)}</div>{chapter<chapters.length-1?<button type="button" className="btn-primary" onClick={()=>change(chapter+1)}>Next: {chapters[chapter+1].short} <Icon name="arrow" size={17}/></button>:<button type="button" className="btn-primary" onClick={()=>change(0)}>Back to start <Icon name="arrow" size={17}/></button>}</div>
