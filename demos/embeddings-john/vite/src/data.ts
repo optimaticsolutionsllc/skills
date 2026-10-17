@@ -24,14 +24,14 @@ export const queries: SearchExample[] = [
   { label: '🤝 Make clients feel cared for', text: 'How do I make a new client feel looked after?', vector: [0.12, 0.22, 0.06, 0.97], x: 327, y: 252 },
 ];
 export const clips: Clip[] = [
-  { id: 'A', text: 'I cut useless meetings and got my week back.', reason: 'Fewer meetings can give an owner more time.', vector: [0.97, 0.12, 0.05, 0.08], x: 90, y: 80, color: '#75edc7' },
-  { id: 'B', text: 'My team can now run daily tasks without me.', reason: 'Systems help an owner leave day-to-day work.', vector: [0.92, 0.09, 0.12, 0.13], x: 142, y: 115, color: '#75edc7' },
-  { id: 'C', text: 'I stopped chasing everybody and spoke to the people I could help.', reason: 'Find people who fit the service.', vector: [0.16, 0.98, 0.22, 0.07], x: 291, y: 85, color: '#9bbdff' },
-  { id: 'D', text: 'A clear offer made sales talks much easier.', reason: 'Better offer and sales process.', vector: [0.07, 0.98, 0.28, 0.08], x: 350, y: 124, color: '#9bbdff' },
-  { id: 'E', text: 'I quit posting everywhere just to look busy. I picked one channel.', reason: 'Less busywork in social media marketing.', vector: [0.19, 0.44, 0.98, 0.03], x: 86, y: 258, color: '#ffcc81' },
-  { id: 'F', text: 'I planned posts around real questions from clients.', reason: 'Make marketing useful instead of noisy.', vector: [0.13, 0.30, 0.98, 0.15], x: 157, y: 279, color: '#ffcc81' },
-  { id: 'G', text: 'I sent a small gift to make a new client feel welcome.', reason: 'Show thoughtful care to a client.', vector: [0.10, 0.09, 0.09, 0.99], x: 304, y: 250, color: '#f7aeb0' },
-  { id: 'H', text: 'I listened before giving a client the next step.', reason: 'Good service means hearing what matters.', vector: [0.12, 0.21, 0.09, 0.98], x: 351, y: 278, color: '#f7aeb0' },
+  { id: 'A', text: 'I cut useless meetings and got my week back.', reason: 'Fewer meetings can give an owner more time.', vector: [0.97, 0.12, 0.05, 0.08], x: 90, y: 80, color: '#007EA8' },
+  { id: 'B', text: 'My team can now run daily tasks without me.', reason: 'Systems help an owner leave day-to-day work.', vector: [0.92, 0.09, 0.12, 0.13], x: 142, y: 115, color: '#007EA8' },
+  { id: 'C', text: 'I stopped chasing everybody and spoke to the people I could help.', reason: 'Find people who fit the service.', vector: [0.16, 0.98, 0.22, 0.07], x: 291, y: 85, color: '#5398B4' },
+  { id: 'D', text: 'A clear offer made sales talks much easier.', reason: 'Better offer and sales process.', vector: [0.07, 0.98, 0.28, 0.08], x: 350, y: 124, color: '#5398B4' },
+  { id: 'E', text: 'I quit posting everywhere just to look busy. I picked one channel.', reason: 'Less busywork in social media marketing.', vector: [0.19, 0.44, 0.98, 0.03], x: 86, y: 258, color: '#9AA6BE' },
+  { id: 'F', text: 'I planned posts around real questions from clients.', reason: 'Make marketing useful instead of noisy.', vector: [0.13, 0.30, 0.98, 0.15], x: 157, y: 279, color: '#9AA6BE' },
+  { id: 'G', text: 'I sent a small gift to make a new client feel welcome.', reason: 'Show thoughtful care to a client.', vector: [0.10, 0.09, 0.09, 0.99], x: 304, y: 250, color: '#8294A3' },
+  { id: 'H', text: 'I listened before giving a client the next step.', reason: 'Good service means hearing what matters.', vector: [0.12, 0.21, 0.09, 0.98], x: 351, y: 278, color: '#8294A3' },
 ];
 export const pipelineSteps: { title: string; description: string; example?: string; icon: string; short: string }[] = [
   { title: '1. John speaks on video', short: 'Get video', icon: '🎥', description: 'Rose has a recording of a coaching session. A video file contains pictures and sound. The number maker cannot search that video by itself.' },

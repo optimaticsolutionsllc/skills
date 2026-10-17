@@ -132,20 +132,20 @@ function Pipeline() {
 function MeaningMap({ queryIndex, selectedClip, onSelect }: { queryIndex: number; selectedClip: string | null; onSelect: (clip: Clip) => void }) {
   const q = queries[queryIndex];
   return <svg className="meaning-map" viewBox="0 0 420 335" role="img" aria-label="Illustrated meaning map. Use the clip buttons below the map for an accessible selection.">
-    <rect width="420" height="335" rx="20" fill="#092a31" />
+    <rect width="420" height="335" rx="20" fill="#004C6D" />
     {[
-      {x:115,y:96,rx:92,ry:69,c:'#9ee4d8'},
-      {x:320,y:98,rx:82,ry:72,c:'#b2c8ff'},
-      {x:121,y:263,rx:101,ry:54,c:'#f6c57b'},
-      {x:330,y:255,rx:73,ry:51,c:'#ffc1bd'},
+      {x:115,y:96,rx:92,ry:69,c:'#9CC9DC'},
+      {x:320,y:98,rx:82,ry:72,c:'#C6DBE8'},
+      {x:121,y:263,rx:101,ry:54,c:'#9AA6BE'},
+      {x:330,y:255,rx:73,ry:51,c:'#DDE8EF'},
     ].map(g => <ellipse key={g.c} cx={g.x} cy={g.y} rx={g.rx} ry={g.ry} fill={g.c} fillOpacity=".10" stroke={g.c} strokeOpacity=".45" strokeWidth="1.7" strokeDasharray="6 5"/>)}
-    <g fontSize="12" fontWeight="750" letterSpacing=".2" fill="#e7f5ef"><text x="55" y="29">Time &amp; systems</text><text x="256" y="29">Clients &amp; sales</text><text x="59" y="207">Marketing</text><text x="286" y="207">Client care</text></g>
+    <g fontSize="12" fontWeight="750" letterSpacing=".2" fill="#FFFFFF"><text x="55" y="29">Time &amp; systems</text><text x="256" y="29">Clients &amp; sales</text><text x="59" y="207">Marketing</text><text x="286" y="207">Client care</text></g>
     {clips.map(c => <g key={c.id} onClick={() => onSelect(c)} tabIndex={0} role="button" aria-label={`Read clip ${c.id}`} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onSelect(c)}}} className="map-clip">
-      {c.id === selectedClip && <circle cx={c.x} cy={c.y} r="20" fill="none" stroke="#fff9db" strokeWidth="2.6"/>}
-      <circle cx={c.x} cy={c.y} r="14" fill={c.color} stroke="#08323a" strokeWidth="3"/><text x={c.x} y={c.y+4} textAnchor="middle" fill="#16383e" fontSize="13" fontWeight="900" pointerEvents="none">{c.id}</text>
+      {c.id === selectedClip && <circle cx={c.x} cy={c.y} r="20" fill="none" stroke="#FFFFFF" strokeWidth="2.6"/>}
+      <circle cx={c.x} cy={c.y} r="14" fill={c.color} stroke="#00354D" strokeWidth="3"/><text x={c.x} y={c.y+4} textAnchor="middle" fill="#FFFFFF" fontSize="13" fontWeight="900" pointerEvents="none">{c.id}</text>
     </g>)}
-    <circle cx={q.x} cy={q.y} r="23" stroke="#ffe5aa" strokeOpacity=".5" fill="#ffe5aa" fillOpacity=".12" strokeDasharray="3 5"/>
-    <rect x={q.x-7} y={q.y-7} width="14" height="14" rx="2" fill="#ffe5aa" stroke="#274842" strokeWidth="1" transform={`rotate(45 ${q.x} ${q.y})`}/>
+    <circle cx={q.x} cy={q.y} r="23" stroke="#C8102E" strokeOpacity=".5" fill="#C8102E" fillOpacity=".12" strokeDasharray="3 5"/>
+    <rect x={q.x-7} y={q.y-7} width="14" height="14" rx="2" fill="#C8102E" stroke="#004C6D" strokeWidth="1" transform={`rotate(45 ${q.x} ${q.y})`}/>
   </svg>;
 }
 
@@ -241,7 +241,7 @@ export function App() {
         <p className="sidebar-footnote">Inspired by the calm, useful business systems John teaches. Not an official John brand product.</p>
       </div></aside>
       <main className="content" id="lesson-content">
-        <section className="hero-banner" aria-label="Lesson introduction"><div><span className="hero-kicker">THE FIVE-MINUTE IDEA, BUILT TO PRACTICE</span><h2>Find the <em>meaning.</em><br/>Keep the <em>proof.</em></h2><p>Using the kind of clips Rose searches for in John's recordings.</p><div className="hero-pills"><span>✳ No tech skills needed</span><span>✳ Try every step</span></div></div><div className="hero-art" aria-hidden="true"><span className="art-word word-a">“Less busy”</span><span className="art-word word-b">“More free time”</span><span className="art-vector">[ 0.96 · 0.11 · … ]</span><span className="art-dot dot-a"/><span className="art-dot dot-b"/><span className="art-dot dot-c"/><svg viewBox="0 0 300 260" preserveAspectRatio="none"><path d="M62 93 Q152 36 233 138" stroke="#c2ffd8" strokeDasharray="5 9" strokeWidth="2" fill="none"/><path d="M55 173 Q145 230 233 138" stroke="#e7c39a" strokeDasharray="4 10" strokeWidth="2" fill="none"/></svg></div></section>
+        <section className="hero-banner" aria-label="Lesson introduction"><div><span className="hero-kicker">THE FIVE-MINUTE IDEA, BUILT TO PRACTICE</span><h2>Find the <em>meaning.</em><br/>Keep the <em>proof.</em></h2><p>Using the kind of clips Rose searches for in John's recordings.</p><div className="hero-pills"><span>✳ No tech skills needed</span><span>✳ Try every step</span></div></div><div className="hero-art" aria-hidden="true"><span className="art-word word-a">“Less busy”</span><span className="art-word word-b">“More free time”</span><span className="art-vector">[ 0.96 · 0.11 · … ]</span><span className="art-dot dot-a"/><span className="art-dot dot-b"/><span className="art-dot dot-c"/><svg viewBox="0 0 300 260" preserveAspectRatio="none"><path d="M62 93 Q152 36 233 138" stroke="#007EA8" strokeDasharray="5 9" strokeWidth="2" fill="none"/><path d="M55 173 Q145 230 233 138" stroke="#9AA6BE" strokeDasharray="4 10" strokeWidth="2" fill="none"/></svg></div></section>
         <div className="chapter-topline"><span className="chapter-name">LESSON {String(chapter+1).padStart(2,'0')} <span> / {active.short.toUpperCase()}</span></span><span className="demo-label"><Icon name="shield" size={15}/> Safe practice data</span></div>
         <div key={chapter} className="lesson-view">{views[chapter]}</div>
         <div className="lesson-actions"><button type="button" onClick={()=>change(chapter-1)} disabled={chapter===0} className="btn-secondary">← Previous</button><div className="action-progress">{chapters.map((_,i)=><span className={i===chapter?'active':visited.has(i)?'seen':''} key={i}/>)}</div>{chapter<chapters.length-1?<button type="button" className="btn-primary" onClick={()=>change(chapter+1)}>Next: {chapters[chapter+1].short} <Icon name="arrow" size={17}/></button>:<button type="button" className="btn-primary" onClick={()=>change(0)}>Back to start <Icon name="arrow" size={17}/></button>}</div>
