@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { clips, labels, pipelineSteps, queries, quizQuestions, sentences, type Clip, type Vector4 } from './data';
 import { rankedClips } from './math';
@@ -338,13 +338,39 @@ function Quiz() {
 
 const views=[<FirstEmbedding/>,<Problem/>,<NumberCards/>,<Pipeline/>,<Search/>,<Check/>,<YourWork/>,<Quiz/>];
 
+type Theme = 'light' | 'dark';
+function initialTheme(): Theme {
+  try {
+    const saved = window.localStorage.getItem('embeddings-by-doing-theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+  } catch { /* Storage can be disabled in a private browser. */ }
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 export function App() {
+  const [theme, setTheme] = useState<Theme>(initialTheme);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    document.querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme === 'dark' ? '#0D1724' : '#FAF9F5');
+    try {
+      window.localStorage.setItem('embeddings-by-doing-theme', theme);
+    } catch { /* Still usable if storage is blocked. */ }
+  }, [theme]);
+
   const [chapter,setChapter]=useState(0);const [visited,setVisited]=useState<ReadonlySet<number>>(new Set([0]));
   function change(next:number){if(next<0||next>=chapters.length)return;setChapter(next);setVisited(old=>new Set([...old,next]));window.scrollTo({top:0,behavior:'instant'});}
   const active=chapters[chapter];
   return <div className="app-shell">
     <a className="skip-link" href="#lesson-content">Skip to lesson</a>
-    <header className="topbar"><div className="site-container topbar-inner"><div className="brandmark"><span className="brand-orbit">✳</span><div><strong>HAPPIER WORK <span className="brand-slash">/</span> LEARNING LAB</strong><small>A Rose + Tim practice tool</small></div></div><span className="topbar-right"><span className="status-dot"/>Works without the workshop API</span></div></header>
+    <header className="topbar"><div className="site-container topbar-inner"><div className="brandmark"><span className="brand-orbit">✳</span><div><strong>HAPPIER WORK <span className="brand-slash">/</span> LEARNING LAB</strong><small>A Rose + Tim practice tool</small></div></div><div className="topbar-controls">
+      <div className="theme-toggle" role="group" aria-label="Color theme">
+        <button type="button" aria-label="Use light mode" aria-pressed={theme === 'light'} onClick={() => setTheme('light')}><span aria-hidden="true">☀</span> Light</button>
+        <button type="button" aria-label="Use dark mode" aria-pressed={theme === 'dark'} onClick={() => setTheme('dark')}><span aria-hidden="true">☾</span> Dark</button>
+      </div>
+      <span className="topbar-right"><span className="status-dot"/>Works without the workshop API</span>
+    </div></div></header>
     <div className="site-container main-layout">
       <aside className="sidebar" aria-label="Lesson outline"><div className="sidebar-sticky"><div className="course-card"><span className="course-kicker">GUIDED LESSON</span><h1>Make an<br/><em>embedding.</em></h1><p>Text in. Numbers out. Similar ideas found.</p><div className="course-line"><Icon name="play" size={16}/> About 12 minutes</div></div>
         <div className="course-nav-title">YOUR PATH <span>{chapter+1} / {chapters.length}</span></div>
