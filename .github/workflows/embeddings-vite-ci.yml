@@ -1,0 +1,23 @@
+name: Embeddings Vite CI
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'demos/embeddings-john/vite/**'
+      - '.github/workflows/embeddings-vite-ci.yml'
+  pull_request:
+    paths:
+      - 'demos/embeddings-john/vite/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: demos/embeddings-john/vite
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
