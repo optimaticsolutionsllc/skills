@@ -74,7 +74,7 @@ export function RecordingRoom() {
 type QualityItem={id:string;bad:string;good:string;issue:string;why:string};
 const REPAIR:QualityItem[]=[
  {id:'01',bad:'final_john_EDIT_new.mp4',good:'source: demo-call-024 | segment: m03 | 05:23–05:42 | version: raw-v1',issue:'File name cannot tell which call or time it came from',why:'A system needs a stable ID, not just a file name.'},
- {id:'02',bad:'Client was happy. Great success story.',good:'speaker: client | claim: “I think that would give me Friday back” | status: unverified',issue:'An assumption was saved as proven client success',why:'Separate a client's hope from an outcome that was actually measured.'},
+ {id:'02',bad:'Client was happy. Great success story.',good:'speaker: client | claim: “I think that would give me Friday back” | status: unverified',issue:'An assumption was saved as proven client success',why:'Separate a client’s hope from an outcome that was actually measured.'},
  {id:'03',bad:'Video = complete transcript.txt',good:'video: source.mp4 | audio: source.wav | raw_asr: v1 | corrected: v2 | frame_samples: /frames/',issue:'One transcript hides the audio, video, and corrections',why:'Keep media as separate linked assets so each can be searched and checked.'}
 ];
 export function LabelLab(){
