@@ -46,3 +46,13 @@ A real production app would use a dedicated embedding model, a transcript ingest
 ## Source
 
 Adapted from the original standalone lesson at `../content-finder.html` in the same repository. The original remains untouched.
+
+## Level 2 — Multimodal Content Pipeline Lab (October 2026)
+
+The eight beginner lessons are preserved. Five new, separate interactive modules explore text/image/audio/video embeddings; timestamped recordings and incorrect ASR; labels, provenance and consent; 90-day post performance and source retrieval; model selection and editable embedding-only budget estimates.
+
+The learning app uses invented data only. It processes no John content, makes no API calls, and contains no real client identifiers, proof, or analytics. Cost estimates use Google Gemini and OpenAI embedding pricing (source links appear inside the app); verify before processing. Client data privacy and permission must be reviewed before API uploads.
+
+### Practical evaluation before production
+
+Index 20–30 real calls after consent/access review. Use 30–50 manually verified searches as a benchmark. Keep recording ID, moment ID, start/end milliseconds, raw+corrected ASR, speaker IDs, source video and audio URI, sampled frames, model+version, approval flags, and post/90-day results. Compare retrieval quality, review time, false matches and lead/conversion outcomes before ingesting the full archive.

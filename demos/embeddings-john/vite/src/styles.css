@@ -414,3 +414,17 @@ html[data-theme=dark] .lab-remember-grid>div{background:#192A3D;border-color:#46
 html[data-theme=dark] .lab-remember-grid h3{color:#F1F7FB}
 html[data-theme=dark] .lab-remember-grid p{color:#CBDCE7}
 @media(prefers-reduced-motion:reduce){.theme-toggle button{transition:none}}
+
+/* Separate learning levels, including mobile path selector */
+.hero-level-links{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:15px}
+.hero-level-links button,.advanced-jump-sidebar button{font:750 12px/1.4 Montserrat,Arial,sans-serif;min-height:43px;padding:10px 13px;border-radius:9px;cursor:pointer;border:1px solid #5D90A9;background:#FFFFFF;color:#004C6D}
+.hero-level-links button.on{background:#004C6D;color:#FFFFFF;border-color:#004C6D}
+.hero-level-links button:hover{border-color:#C8102E}
+.hero-level-links button span{font-size:15px}
+.advanced-jump-sidebar{padding:15px 13px;background:var(--pale);border:1px solid var(--line);border-radius:12px;margin:15px 0}
+.advanced-jump-sidebar strong{display:block;color:var(--mint);letter-spacing:.1em;font-size:10px}
+.advanced-jump-sidebar p{color:var(--muted);font-size:12px;line-height:1.5}
+.advanced-jump-sidebar button{width:100%;background:#004C6D;color:#FFFFFF}
+html[data-theme=dark] .hero-level-links button{background:#263E54;color:#EAF5FB;border-color:#54778C}
+html[data-theme=dark] .hero-level-links button.on{background:#004C6D;color:#FFFFFF;border-color:#79C7EB}
+html[data-theme=dark] .advanced-jump-sidebar button{background:#004C6D;color:#FFFFFF}

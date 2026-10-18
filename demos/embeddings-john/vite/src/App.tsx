@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { clips, labels, pipelineSteps, queries, quizQuestions, sentences, type Clip, type Vector4 } from './data';
 import { rankedClips } from './math';
+import { MediaTypes, RecordingRoom, LabelLab, ContentFinder, ModelAndCost } from './Advanced';
 
 const chapters = [
   { short: 'What is it?', title: 'Watch an embedding happen', prompt: 'One piece of text in, number card out' },
@@ -12,6 +13,11 @@ const chapters = [
   { short: 'Check it', title: 'A match is not proof', prompt: 'What can go wrong?' },
   { short: 'Your work', title: 'Put it to work', prompt: 'How would Rose use it?' },
   { short: 'Quick test', title: 'You do the explaining', prompt: 'Can you teach it back?' },
+  { short: 'Media types', title: 'Search sound, images and video', prompt: 'Level 2 · What else can embeddings see?' },
+  { short: 'One recording', title: 'Inspect a full coaching moment', prompt: 'Level 2 · Video + audio + words together' },
+  { short: 'Fix the labels', title: 'Repair your content pipeline', prompt: 'Level 2 · File IDs and missing proof' },
+  { short: 'Find content', title: 'From 90-day results to new clips', prompt: 'Level 2 · Search proven formats' },
+  { short: 'Models & cost', title: 'Pick the right model and budget', prompt: 'Level 2 · Pilot before scaling' },
 ] as const;
 
 function Icon({ name, size = 22 }: { name: 'arrow' | 'chevron' | 'play' | 'check' | 'search' | 'spark' | 'link' | 'brain' | 'shield'; size?: number }) {
@@ -336,7 +342,7 @@ function Quiz() {
   </>;
 }
 
-const views=[<FirstEmbedding/>,<Problem/>,<NumberCards/>,<Pipeline/>,<Search/>,<Check/>,<YourWork/>,<Quiz/>];
+const views=[<FirstEmbedding/>,<Problem/>,<NumberCards/>,<Pipeline/>,<Search/>,<Check/>,<YourWork/>,<Quiz/>,<MediaTypes/>,<RecordingRoom/>,<LabelLab/>,<ContentFinder/>,<ModelAndCost/>];
 
 type Theme = 'light' | 'dark';
 function initialTheme(): Theme {
@@ -372,14 +378,14 @@ export function App() {
       <span className="topbar-right"><span className="status-dot"/>Works without the workshop API</span>
     </div></div></header>
     <div className="site-container main-layout">
-      <aside className="sidebar" aria-label="Lesson outline"><div className="sidebar-sticky"><div className="course-card"><span className="course-kicker">GUIDED LESSON</span><h1>Make an<br/><em>embedding.</em></h1><p>Text in. Numbers out. Similar ideas found.</p><div className="course-line"><Icon name="play" size={16}/> About 12 minutes</div></div>
+      <aside className="sidebar" aria-label="Lesson outline"><div className="sidebar-sticky"><div className="course-card"><span className="course-kicker">GUIDED LESSON</span><h1>Make an<br/><em>embedding.</em></h1><p>Text in. Numbers out. Similar ideas found.</p><div className="course-line"><Icon name="play" size={16}/> Basics ~12 min · Level 2 ~20 min</div></div>
         <div className="course-nav-title">YOUR PATH <span>{chapter+1} / {chapters.length}</span></div>
         <nav className="chapter-nav">{chapters.map((c,i)=><button type="button" key={c.short} onClick={()=>change(i)} aria-current={chapter===i?'step':undefined} className={`chapter-link ${chapter===i?'active':''}`}><span className="chapter-index">{visited.has(i)&&i<chapter?<Icon name="check" size={15}/>:String(i+1).padStart(2,'0')}</span><span><strong>{c.short}</strong><small>{c.prompt}</small></span>{chapter===i&&<Icon name="chevron" size={18}/>}</button>)}</nav>
-        <p className="sidebar-footnote">Inspired by the calm, useful business systems John teaches. Not an official John brand product.</p>
+        <div className="advanced-jump-sidebar"><strong>LEVEL 2</strong><p>Already understand number cards? Explore the real content pipeline.</p><button type="button" onClick={()=>change(8)}>Open Pipeline Lab →</button></div><p className="sidebar-footnote">Inspired by the calm, useful business systems John teaches. Not an official John brand product.</p>
       </div></aside>
       <main className="content" id="lesson-content">
-        <section className="hero-banner" aria-label="Lesson introduction"><div><span className="hero-kicker">THE PLAIN ANSWER, BUILT TO PRACTICE</span><h2>Find the <em>meaning.</em><br/>Keep the <em>proof.</em></h2><p>Using the kind of clips Rose searches for in John's recordings.</p><div className="hero-pills"><span>✳ No tech skills needed</span><span>✳ Try every step</span></div></div><div className="hero-art" aria-hidden="true"><span className="art-word word-a">“Less busy”</span><span className="art-word word-b">“More free time”</span><span className="art-vector">[ 0.96 · 0.11 · … ]</span><span className="art-dot dot-a"/><span className="art-dot dot-b"/><span className="art-dot dot-c"/><svg viewBox="0 0 300 260" preserveAspectRatio="none"><path d="M62 93 Q152 36 233 138" stroke="#007EA8" strokeDasharray="5 9" strokeWidth="2" fill="none"/><path d="M55 173 Q145 230 233 138" stroke="#9AA6BE" strokeDasharray="4 10" strokeWidth="2" fill="none"/></svg></div></section>
-        <div className="chapter-topline"><span className="chapter-name">LESSON {String(chapter+1).padStart(2,'0')} <span> / {active.short.toUpperCase()}</span></span><span className="demo-label"><Icon name="shield" size={15}/> Safe practice data</span></div>
+        <section className="hero-banner" aria-label="Lesson introduction"><div><span className="hero-kicker">THE PLAIN ANSWER, BUILT TO PRACTICE</span><h2>Find the <em>meaning.</em><br/>Keep the <em>proof.</em></h2><p>Using the kind of clips Rose searches for in John's recordings.</p><div className="hero-pills"><span>✳ No tech skills needed</span><span>✳ Try every step</span></div><div className="hero-level-links"><button type="button" onClick={()=>change(0)} className={chapter<8?'on':''}>Level 1 · Embeddings basics</button><button type="button" onClick={()=>change(8)} className={chapter>=8?'on':''}>Level 2 · Media &amp; Pipeline Lab <span aria-hidden="true">↗</span></button></div></div><div className="hero-art" aria-hidden="true"><span className="art-word word-a">“Less busy”</span><span className="art-word word-b">“More free time”</span><span className="art-vector">[ 0.96 · 0.11 · … ]</span><span className="art-dot dot-a"/><span className="art-dot dot-b"/><span className="art-dot dot-c"/><svg viewBox="0 0 300 260" preserveAspectRatio="none"><path d="M62 93 Q152 36 233 138" stroke="#007EA8" strokeDasharray="5 9" strokeWidth="2" fill="none"/><path d="M55 173 Q145 230 233 138" stroke="#9AA6BE" strokeDasharray="4 10" strokeWidth="2" fill="none"/></svg></div></section>
+        <div className="chapter-topline"><span className="chapter-name">{chapter>=8?'LEVEL 2 · LAB':'LEVEL 1 · LESSON'} {String(chapter>=8?chapter-7:chapter+1).padStart(2,'0')} <span> / {active.short.toUpperCase()}</span></span><span className="demo-label"><Icon name="shield" size={15}/> Safe practice data</span></div>
         <div key={chapter} className="lesson-view">{views[chapter]}</div>
         <div className="lesson-actions"><button type="button" onClick={()=>change(chapter-1)} disabled={chapter===0} className="btn-secondary">← Previous</button><div className="action-progress">{chapters.map((_,i)=><span className={i===chapter?'active':visited.has(i)?'seen':''} key={i}/>)}</div>{chapter<chapters.length-1?<button type="button" className="btn-primary" onClick={()=>change(chapter+1)}>Next: {chapters[chapter+1].short} <Icon name="arrow" size={17}/></button>:<button type="button" className="btn-primary" onClick={()=>change(0)}>Back to start <Icon name="arrow" size={17}/></button>}</div>
         <footer className="foot"><p><strong>Made for learning.</strong> Practice clips, numbers, timestamps, and map dots are invented examples, not John's actual recordings. Comparison math is real; the 4-number cards are not live embeddings.</p><p>Inspired by <a href="https://www.johnjdmunn.com/" target="_blank" rel="noreferrer">John J D Munn's</a> focus on time, systems, and happier work. No login or live embedding service required.</p></footer>
